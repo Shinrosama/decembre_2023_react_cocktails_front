@@ -1,25 +1,26 @@
-
-import './App.css';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import HomePage from './pages/guest/HomePage';
-import CoworkingsPage from './pages/guest/CoworkingsPage';
-import DashboardPage from './pages/admin/DashboardPage';
-import CoworkingsDetailPage from './pages/guest/CoworkingDetailPage';
-import LoginPage from './pages/guest/LoginPage';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
+import HomePage from "./page/guest/HomePage";
+import CoworkingsPage from "./page/guest/CoworkingsPage";
+import CoworkingDetailsPage from "./page/guest/CoworkingDetailsPage";
+import DashboardPage from "./page/admin/DashboardPage";
+import LoginPage from "./page/guest/LoginPage";
+import AdminCoworkingsPage from "./page/admin/AdminCoworkingsPage";
 
 function App() {
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element= {<HomePage />} />
-          <Route path="/coworking" element= {<CoworkingsPage/>} />
-          <Route path='/coworking/detail/:id' element= {<CoworkingsDetailPage/>} />
-          <Route path="/admin" element= {<DashboardPage/>} />
-          <Route path='/login' element= {<LoginPage/>} />
-        </Routes>
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/coworkings" element={<CoworkingsPage />} />
+        <Route path="/coworking/details/:id" element={<CoworkingDetailsPage />} />
+
+        <Route path="/login" element={<LoginPage />} />
+
+        <Route path="/admin/" element={<DashboardPage />} />
+        <Route path="/admin/coworkings" element={<AdminCoworkingsPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

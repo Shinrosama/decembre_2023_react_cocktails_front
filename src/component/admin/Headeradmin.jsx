@@ -1,10 +1,9 @@
-function HeaderAdmin () {
+const HeaderAdmin = () => {
+  return (
+    <header>
+      <h2>Header admin</h2>
+    </header>
+  );
+};
 
-    return (
-        <>
-            <h2>juste un message</h2>
-        </>
-    )
-}
-
-export default HeaderAdmin
+export default HeaderAdmin;
