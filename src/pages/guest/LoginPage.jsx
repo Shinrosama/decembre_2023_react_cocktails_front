@@ -28,6 +28,10 @@ const LoginPage = () => {
       const token = loginResponseData.data;
 // on vérifie d'avoir bien reçu le token
       console.log(token)
+
+      if (token)  {
+         localStorage.setitem("jwt", token)
+      }
   
       // je créé objet en json avec username et password
       // je fais un fetch de type POST sur mon API login, en incluant le json
