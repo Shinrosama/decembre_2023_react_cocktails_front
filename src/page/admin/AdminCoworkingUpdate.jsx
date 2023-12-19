@@ -6,6 +6,10 @@ const AdminCoworkingUpdate = () => {
   const { id } = useParams();
   //je fait un useState pour pourvoir récupérer les informations lors du rechargement de mon composant
   const [coworking, setCoworking] = useState(null);
+
+  const [message, setMessage] = useState(null);
+
+
 // je fait un fetch pour récupérer le coworking corespondant a l'id dans l'api
   useEffect(() => {
     //comme c'est asychrone (await) on encpasule le fetch dans une fonction async
@@ -17,12 +21,69 @@ const AdminCoworkingUpdate = () => {
       setCoworking(coworkingResponseData.data);
     })();
   }, []);
+  //je veux récupérer les valeurs d'un coworking coté api
+  const handleUpdateCoworking = async (event) => {
+
+    //je veux empêcher le rechargement automatique de la page
+    event.preventDefault();
+
+    const name = event.target.name.value;
+    const priceByMonth = event.target.priceByMonth.value;
+    const priceByDay = event.target.priceByDay.value;
+    const priceByHour = event.target.priceByHour.value;
+    const addressNumber = event.target.addressNumber.value;
+    const addressStreet = event.target.addressStreet.value;
+    const addressCity = event.target.addressCity.value;
+    const addressPostcode = event.target.addressPostcode.value;
+    const superficy = event.target.superficy.value;
+    const capacity = event.target.capacity.value;
+    //je veux un objet comme le model de l'api
+    const coworkingUpdateData = {
+      name: name,
+      price: {
+        month: priceByMonth,
+        day: priceByDay,
+        hour: priceByHour,
+      },
+      address: {
+        number: addressNumber,
+        street: addressStreet,
+        city: addressCity,
+        postCode: addressPostcode,
+      },
+      superficy: superficy,
+      capacity: capacity,
+    };
+//je veux que l'objet soit convertis en json
+    const coworkingUpdateDataJson = JSON.stringify(coworkingUpdateData);
+ // je récupère la jwt pour avoir le token
+    const token = localStorage.getItem("jwt");
+//je fait un fetch sur l'url coworkings 
+    const updateCoworkingResponse = await fetch("http://localhost:3000/api/coworkings/" + id, {
+      method: "PUT",
+       //avec la methode put je crée un coworking 
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      //les donnée pour le coworking constituent le body
+      body: coworkingUpdateDataJson,
+    });
+        //si la réponse est un statu 201
+    if (updateCoworkingResponse.status === 201) {
+         //on dit que c'est bon
+      setMessage("Mise à jour OK");
+    } else {
+        //sinon on fait état d'une erreur
+      setMessage("Erreur");
+    }
+  };
 
   return (
     <div>
-        {/* si on obtiens un coworking on veut que les champs du formulaire se remplissent des information comme dans le modèle */}
+      <>{message && <p>{message}</p>}</>
       {coworking && (
-        <form>
+        <form onSubmit={handleUpdateCoworking}>
           <div>
             <label>
               Nom
