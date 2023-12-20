@@ -7,7 +7,7 @@ const CoworkingsPage = () => {
 
   useEffect(() => {
     (async () => {
-      const coworkingsResponse = await fetch("http://localhost:3000/api/coworkings");
+      const coworkingsResponse = await fetch("http://localhost:3010/api/coworkings");
 
       const coworkingsResponseData = await coworkingsResponse.json();
 

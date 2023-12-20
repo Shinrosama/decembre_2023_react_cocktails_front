@@ -9,12 +9,12 @@ const CoworkingDetailsPage = () => {
 
   useEffect(() => {
     (async () => {
-      const coworkingResponse = await fetch("http://localhost:3000/api/coworkings/" + id);
+      const coworkingResponse = await fetch("http://localhost:3010/api/coworkings/" + id);
       const coworkingResponseData = await coworkingResponse.json();
 
       setCoworking(coworkingResponseData);
     })();
-  }, [id]);
+  }, []);
 
   return (
     <>

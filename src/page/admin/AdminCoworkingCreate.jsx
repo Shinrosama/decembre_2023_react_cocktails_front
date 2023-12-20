@@ -1,74 +1,85 @@
-import { useState } from "react"
+import { useState } from "react";
+import HeaderAdmin from "../../component/admin/HeaderAdmin";
 
-const AdminCoworkingCreate = () =>{
+const AdminCoworkingCreate = () => {
+  // je créé un stage pour afficher un message de succès ou d'erreur
+  const [message, setMessage] = useState(null);
 
-// le state sert a l'affichage du message avec deux états pour la russite ou l'erreur
- const [message, setMessage ] = useState(null);
-// je veux pouvoir prendre les valeurs dans le formulaire pour créer un coworking, la fonction est asyncrone car je veux faire un fetch.
- const handleCreateCoworking = async (event) => {
-//je ne veux pas que la page se recharge
-        event.preventDefault();
+  // je créé une fonction appelé par mon event listener
+  // pour créé un coworking
+  // la fonction est asynchrone, car on fait un fetch à l'intérieur
+  const handleCreateCoworking = async (event) => {
+    // j'empêche le rechargement par défaut de la page au submit
+    event.preventDefault();
 
-        //je récupère les valeurs du formulaire
-        const name = event.target.name.value;
-        const priceByMonth = event.target.priceByMonth.value;
-        const priceByDay = event.target.priceByDay.value;
-        const priceByHour = event.target.priceByHour.value;
-        const addressNumber = event.target.addressNumber.value;
-        const addressStreet = event.target.addressStreet.value;
-        const addressCity = event.target.addressCity.value;
-        const addressPostcode = event.target.addressPostcode.value;
-        const superficy = event.target.superficy.value;
-        const capacity = event.target.capacity.value;
-        //je crée un objet sur le modèle d'un coworking dans l'api
-        const coworkingToCreate = {
-            name: name,
-            price: {
-              month: priceByMonth,
-              day: priceByDay,
-              hour: priceByHour,
-            },
-            address: {
-              number: addressNumber,
-              street: addressStreet,
-              city: addressCity,
-              postCode: addressPostcode,
-            },
-            superficy: superficy,
-            capacity: capacity,
-          };
-            // je veux que l'objet soit converti au format json
-          const coworkingToCreateJson = JSON.stringify(coworkingToCreate);
-          // je récupère la jwt pour avoir le token
-          const token = localStorage.getItem("jwt");
-          //je fait un fetch sur l'url coworkings 
-          const createCoworkingResponse = await fetch("http://localhost:3000/api/coworkings", {
-          //avec la methode post je crée un coworking  
-            method: "POST",
-          
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + token,
-            },
-            //les donnée pour le coworking constituent le body
-            body: coworkingToCreateJson,
-    });
-        //si la réponse est un statu 201
-        if (createCoworkingResponse.status === 201) {
-            //on dit que c'est bon
-            setMessage("Coworking créé !");
-        } else {
-            //sinon on fait état d'une erreur
-            setMessage("Erreur !");
-        }
+    // je récupère les valeurs du form
+    const name = event.target.name.value;
+    const priceByMonth = event.target.priceByMonth.value;
+    const priceByDay = event.target.priceByDay.value;
+    const priceByHour = event.target.priceByHour.value;
+    const addressNumber = event.target.addressNumber.value;
+    const addressStreet = event.target.addressStreet.value;
+    const addressCity = event.target.addressCity.value;
+    const addressPostcode = event.target.addressPostcode.value;
+    const superficy = event.target.superficy.value;
+    const capacity = event.target.capacity.value;
+
+    // je créé un objet avec les valeurs
+    // qui correspond à ce que l'api attend (modèle / table)
+    // les noms doivent correspondre
+    // et les types aussi
+    const coworkingToCreate = {
+      name: name,
+      price: {
+        month: priceByMonth,
+        day: priceByDay,
+        hour: priceByHour,
+      },
+      address: {
+        number: addressNumber,
+        street: addressStreet,
+        city: addressCity,
+        postCode: addressPostcode,
+      },
+      superficy: superficy,
+      capacity: capacity,
     };
 
+    // je transforme mon objet en JSON
+    const coworkingToCreateJson = JSON.stringify(coworkingToCreate);
 
-    return (
-        <>
-        {message && <p>{message}</p>}
+    // je récupère mon token en local storage
+    const token = localStorage.getItem("jwt");
 
-        <form onSubmit={handleCreateCoworking}>
+    // je fais mon appel fetch
+    // sur l'url de création des coworkings
+    // de type POST
+    // avec en header Bearer authorization le token
+    // et en body les données pour créer le coworking
+    const createCoworkingResponse = await fetch("http://localhost:3010/api/coworkings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: coworkingToCreateJson,
+    });
+
+    // si la réponse de création du coworking a un status 201
+    // je créé un message de succès
+    // sinon d'erreur
+    if (createCoworkingResponse.status === 201) {
+      setMessage("Coworking créé !");
+    } else {
+      setMessage("Erreur !");
+    }
+  };
+
+  return (
+    <>
+      <HeaderAdmin />
+      {message && <p>{message}</p>}
+      <form onSubmit={handleCreateCoworking}>
         <div>
           <label>
             Nom
@@ -132,9 +143,8 @@ const AdminCoworkingCreate = () =>{
 
         <input type="submit" />
       </form>
-        </>
+    </>
+  );
+};
 
-    )
-}
-
-export default AdminCoworkingCreate
+export default AdminCoworkingCreate;
